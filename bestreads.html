@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<!-- CSC 337: Assignment BestReads -->
+<head>
+<link rel="stylesheet" type="text/css" href="bestreads.css" />
+<title>Best Reads</title>
+</head>
+<body onload="showAll()">
+
+	<div id="header">
+		<div>
+			<span>bestreads</span>
+		</div>
+		<span id="back">home</span>
+	</div>
+	<div id="books">
+	
+	</div>
+	
+
+
+<script>
+books =  document.getElementById("books");
+function showAll() {
+   
+   var ajax = new XMLHttpRequest();
+   ajax.open("GET",
+		   "bestreads.php?", true); 
+   ajax.send();
+                       
+   ajax.onreadystatechange = function() {
+		if (ajax.readyState == 4 && ajax.status == 200) {
+			var pics = JSON.parse(ajax.responseText);
+			for (i=0; i < (pics.length); i++){
+				books.innerHTML += "<div class='onebook' onclick=eventHandler('" + pics[i].substring(8) + "')><img src='" + pics[i] + "/cover.jpg' alt='pic'></div>";
+			}
+		}
+	}
+ }
+ 
+
+	function eventHandler(selection) {
+		var folder = selection.value;
+		var ajax = new XMLHttpRequest();
+		// This anonymous callback will execute when the server responds
+		ajax.open("GET", "bestreads.php?folder=" + folder, true);
+		ajax.send();
+		ajax.onreadystatechange = function() {
+			if (ajax.readyState == 4 && ajax.status == 200) {
+				alert(ajax.responseText);
+			}
+		}
+	}
+</script>
+
+</body>
+</html>
