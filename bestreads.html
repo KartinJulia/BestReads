@@ -11,43 +11,49 @@
 		<div>
 			<span>bestreads</span>
 		</div>
-		<span id="back">home</span>
+		<span id="back" onclick="showAll()">home</span>
 	</div>
 	<div id="books">
-	
+
 	</div>
-	
+
 
 
 <script>
 books =  document.getElementById("books");
 function showAll() {
-   
+
    var ajax = new XMLHttpRequest();
    ajax.open("GET",
-		   "bestreads.php?", true); 
+		   "bestreads.php?", true);
    ajax.send();
-                       
+
    ajax.onreadystatechange = function() {
 		if (ajax.readyState == 4 && ajax.status == 200) {
 			var pics = JSON.parse(ajax.responseText);
+			books.innerHTML = "";
 			for (i=0; i < (pics.length); i++){
+				//alert(pics[i].substring(8));
 				books.innerHTML += "<div class='onebook' onclick=eventHandler('" + pics[i].substring(8) + "')><img src='" + pics[i] + "/cover.jpg' alt='pic'></div>";
 			}
 		}
 	}
  }
- 
 
-	function eventHandler(selection) {
-		var folder = selection.value;
-		var ajax = new XMLHttpRequest();
+
+function eventHandler(selection) {
+		var folder = selection;
+		var ajax2 = new XMLHttpRequest();
 		// This anonymous callback will execute when the server responds
-		ajax.open("GET", "bestreads.php?folder=" + folder, true);
-		ajax.send();
-		ajax.onreadystatechange = function() {
-			if (ajax.readyState == 4 && ajax.status == 200) {
-				alert(ajax.responseText);
+		//alert(folder);
+		ajax2.open("GET", "bestreads.php?folder=" + folder, true);
+		ajax2.send();
+		ajax2.onreadystatechange = function() {
+			if (ajax2.readyState == 4 && ajax2.status == 200) {
+				var bo = (ajax2.responseText);
+				books.innerHTML = "<div class='onereview'>" + bo + "<div>";
+				// "<div class='onereview'><img src='" + bo + "cover.jpg'>" + "<div class='thedetails'></div>" + "</div>";
+
 			}
 		}
 	}
